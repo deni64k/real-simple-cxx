@@ -1,0 +1,256 @@
+
+:sourcedir: /Users/denis/Code/mine/real-simple-cxx/src
+
+= Type deduction in template arguments
+
+Rule of thumb:
+
+
+----
+include::{sourcedir}/template_params.cxx[]
+----
+
+
+
+.T
+[cols="2,2,2,3",options="header"]
+|=========================================================
+|Argument type, t
+|Template parameter type, T
+|Template value type, dectype(t)
+|\\__func__
+|int
+|`int`|`int`|`void Run(T) [with T = int]`
+|int const
+|`int`|`int`|`void Run(T) [with T = int]`
+|int *
+|`int*`|`int*`|`void Run(T) [with T = int*]`
+|int const *
+|`int const*`|`int const*`|`void Run(T) [with T = const int*]`
+|int const * const
+|`int const*`|`int const*`|`void Run(T) [with T = const int*]`
+|int &
+|`int`|`int`|`void Run(T) [with T = int]`
+|int const &
+|`int`|`int`|`void Run(T) [with T = int]`
+|int &&
+|`int`|`int`|`void Run(T) [with T = int]`
+|int const &&
+|`int`|`int`|`void Run(T) [with T = int]`
+|=========================================================
+
+.T const
+[cols="2,2,2,3",options="header"]
+|=========================================================
+|Argument type, t
+|Template parameter type, T
+|Template value type, dectype(t)
+|\\__func__
+|int
+|`int`|`int const`|`void Run(T) [with T = int]`
+|int const
+|`int`|`int const`|`void Run(T) [with T = int]`
+|int *
+|`int*`|`int* const`|`void Run(T) [with T = int*]`
+|int const *
+|`int const*`|`int const* const`|`void Run(T) [with T = const int*]`
+|int const * const
+|`int const*`|`int const* const`|`void Run(T) [with T = const int*]`
+|int &
+|`int`|`int const`|`void Run(T) [with T = int]`
+|int const &
+|`int`|`int const`|`void Run(T) [with T = int]`
+|int &&
+|`int`|`int const`|`void Run(T) [with T = int]`
+|int const &&
+|`int`|`int const`|`void Run(T) [with T = int]`
+|=========================================================
+
+.T *
+[cols="2,2,2,3",options="header"]
+|=========================================================
+|Argument type, t
+|Template parameter type, T
+|Template value type, dectype(t)
+|\\__func__
+|int
+3+|no matching function for call to `Run(int&)`
+|int const
+3+|no matching function for call to `Run(const int&)`
+|int *
+|`int`|`int*`|`void Run(T*) [with T = int]`
+|int const *
+|`int const`|`int const*`|`void Run(T*) [with T = const int]`
+|int const * const
+|`int const`|`int const*`|`void Run(T*) [with T = const int]`
+|int &
+3+|no matching function for call to `Run(int&)`
+|int const &
+3+|no matching function for call to `Run(const int&)`
+|int &&
+3+|no matching function for call to `Run(int&)`
+|int const &&
+3+|no matching function for call to `Run(const int&)`
+|=========================================================
+
+.T const *
+[cols="2,2,2,3",options="header"]
+|=========================================================
+|Argument type, t
+|Template parameter type, T
+|Template value type, dectype(t)
+|\\__func__
+|int
+3+|no matching function for call to `Run(int&)`
+|int const
+3+|no matching function for call to `Run(const int&)`
+|int *
+|`int`|`int const*`|`void Run(const T*) [with T = int]`
+|int const *
+|`int`|`int const*`|`void Run(const T*) [with T = int]`
+|int const * const
+|`int`|`int const*`|`void Run(const T*) [with T = int]`
+|int &
+3+|no matching function for call to `Run(int&)`
+|int const &
+3+|no matching function for call to `Run(const int&)`
+|int &&
+3+|no matching function for call to `Run(int&)`
+|int const &&
+3+|no matching function for call to `Run(const int&)`
+|=========================================================
+
+.T const * const
+[cols="2,2,2,3",options="header"]
+|=========================================================
+|Argument type, t
+|Template parameter type, T
+|Template value type, dectype(t)
+|\\__func__
+|int
+3+|no matching function for call to `Run(int&)`
+|int const
+3+|no matching function for call to `Run(const int&)`
+|int *
+|`int`|`int const* const`|`void Run(const T*) [with T = int]`
+|int const *
+|`int`|`int const* const`|`void Run(const T*) [with T = int]`
+|int const * const
+|`int`|`int const* const`|`void Run(const T*) [with T = int]`
+|int &
+3+|no matching function for call to `Run(int&)`
+|int const &
+3+|no matching function for call to `Run(const int&)`
+|int &&
+3+|no matching function for call to `Run(int&)`
+|int const &&
+3+|no matching function for call to `Run(const int&)`
+|=========================================================
+
+.T &
+[cols="2,2,2,3",options="header"]
+|=========================================================
+|Argument type, t
+|Template parameter type, T
+|Template value type, dectype(t)
+|\\__func__
+|int
+|`int`|`int&`|`void Run(T&) [with T = int]`
+|int const
+|`int const`|`int const&`|`void Run(T&) [with T = const int]`
+|int *
+|`int*`|`int*&`|`void Run(T&) [with T = int*]`
+|int const *
+|`int const*`|`int const*&`|`void Run(T&) [with T = const int*]`
+|int const * const
+|`int const* const`|`int const* const&`|`void Run(T&) [with T = const int* const]`
+|int &
+|`int`|`int&`|`void Run(T&) [with T = int]`
+|int const &
+|`int const`|`int const&`|`void Run(T&) [with T = const int]`
+|int &&
+|`int`|`int&`|`void Run(T&) [with T = int]`
+|int const &&
+|`int const`|`int const&`|`void Run(T&) [with T = const int]`
+|=========================================================
+
+.T const &
+[cols="2,2,2,3",options="header"]
+|=========================================================
+|Argument type, t
+|Template parameter type, T
+|Template value type, dectype(t)
+|\\__func__
+|int
+|`int`|`int const&`|`void Run(const T&) [with T = int]`
+|int const
+|`int`|`int const&`|`void Run(const T&) [with T = int]`
+|int *
+|`int*`|`int* const&`|`void Run(const T&) [with T = int*]`
+|int const *
+|`int const*`|`int const* const&`|`void Run(const T&) [with T = const int*]`
+|int const * const
+|`int const*`|`int const* const&`|`void Run(const T&) [with T = const int*]`
+|int &
+|`int`|`int const&`|`void Run(const T&) [with T = int]`
+|int const &
+|`int`|`int const&`|`void Run(const T&) [with T = int]`
+|int &&
+|`int`|`int const&`|`void Run(const T&) [with T = int]`
+|int const &&
+|`int`|`int const&`|`void Run(const T&) [with T = int]`
+|=========================================================
+
+.T &&
+[cols="2,2,2,3",options="header"]
+|=========================================================
+|Argument type, t
+|Template parameter type, T
+|Template value type, dectype(t)
+|\\__func__
+|int
+|`int&`|`int&`|`void Run(T&&) [with T = int&]`
+|int const
+|`int const&`|`int const&`|`void Run(T&&) [with T = const int&]`
+|int *
+|`int*&`|`int*&`|`void Run(T&&) [with T = int*&]`
+|int const *
+|`int const*&`|`int const*&`|`void Run(T&&) [with T = const int*&]`
+|int const * const
+|`int const* const&`|`int const* const&`|`void Run(T&&) [with T = const int* const&]`
+|int &
+|`int&`|`int&`|`void Run(T&&) [with T = int&]`
+|int const &
+|`int const&`|`int const&`|`void Run(T&&) [with T = const int&]`
+|int &&
+|`int&`|`int&`|`void Run(T&&) [with T = int&]`
+|int const &&
+|`int const&`|`int const&`|`void Run(T&&) [with T = const int&]`
+|=========================================================
+
+.T const &&
+[cols="2,2,2,3",options="header"]
+|=========================================================
+|Argument type, t
+|Template parameter type, T
+|Template value type, dectype(t)
+|\\__func__
+|int
+3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `int`
+|int const
+3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `const int`
+|int *
+3+|cannot bind rvalue reference of type `int* const&&` to lvalue of type `int*`
+|int const *
+3+|cannot bind rvalue reference of type `const int* const&&` to lvalue of type `const int*`
+|int const * const
+3+|cannot bind rvalue reference of type `const int* const&&` to lvalue of type `const int* const`
+|int &
+3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `int`
+|int const &
+3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `const int`
+|int &&
+3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `int`
+|int const &&
+3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `const int`
+|=========================================================

@@ -1,0 +1,338 @@
+
+:sourcedir: /Users/denis/Code/mine/real-simple-cxx/src
+
+= Type deduction in auto and decltype(auto)
+
+== Rule of thumb:
+
+==== auto
+Gives you a brand new _copy_ of your variable ignoring all _cvr qualifiers_ until you specify them explicitly.
+
+==== decltype(auto) and decltype(expr)
+Gives a variable with the _same type_ as `expr` including _cvr qualifiers_.
+
+==== decltype\((expr))
+As `decltype(expr)` but always gives a _reference_.
+
+== Experiment
+
+----
+include::{sourcedir}/auto.cxx[]
+----
+
+
+
+[cols="<3,^2,<3,<3,<3",options="header"]
+|===
+3+<|Type of `in_val` is `int`
+<|`decltype(in_val)` result
+<|`decltype\((in_val))` result
+
+|`auto`
+|[small,gray]#= in_val =>#
+|`int`|`int`|`int&`
+|`auto const`
+|[small,gray]#= in_val =>#
+|`int const`|`int`|`int&`
+|`auto *`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `auto*` from `in_val`
+|`auto const *`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `const auto*` from `in_val`
+|`auto const * const`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `const auto* const` from `in_val`
+|`auto &`
+|[small,gray]#= in_val =>#
+|`int&`|`int`|`int&`
+|`auto const &`
+|[small,gray]#= in_val =>#
+|`int const&`|`int`|`int&`
+|`auto &&`
+|[small,gray]#= in_val =>#
+|`int&`|`int`|`int&`
+|`auto const &&`
+|[small,gray]#= in_val =>#
+3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `int`
+|===
+
+[cols="<3,^2,<3,<3,<3",options="header"]
+|===
+3+<|Type of `in_val` is `int const`
+<|`decltype(in_val)` result
+<|`decltype\((in_val))` result
+
+|`auto`
+|[small,gray]#= in_val =>#
+|`int`|`int const`|`int const&`
+|`auto const`
+|[small,gray]#= in_val =>#
+|`int const`|`int const`|`int const&`
+|`auto *`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `auto*` from `in_val`
+|`auto const *`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `const auto*` from `in_val`
+|`auto const * const`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `const auto* const` from `in_val`
+|`auto &`
+|[small,gray]#= in_val =>#
+|`int const&`|`int const`|`int const&`
+|`auto const &`
+|[small,gray]#= in_val =>#
+|`int const&`|`int const`|`int const&`
+|`auto &&`
+|[small,gray]#= in_val =>#
+|`int const&`|`int const`|`int const&`
+|`auto const &&`
+|[small,gray]#= in_val =>#
+3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `const int`
+|===
+
+[cols="<3,^2,<3,<3,<3",options="header"]
+|===
+3+<|Type of `in_val` is `int *`
+<|`decltype(in_val)` result
+<|`decltype\((in_val))` result
+
+|`auto`
+|[small,gray]#= in_val =>#
+|`int*`|`int*`|`int*&`
+|`auto const`
+|[small,gray]#= in_val =>#
+|`int* const`|`int*`|`int*&`
+|`auto *`
+|[small,gray]#= in_val =>#
+|`int*`|`int*`|`int*&`
+|`auto const *`
+|[small,gray]#= in_val =>#
+|`int const*`|`int*`|`int*&`
+|`auto const * const`
+|[small,gray]#= in_val =>#
+|`int const* const`|`int*`|`int*&`
+|`auto &`
+|[small,gray]#= in_val =>#
+|`int*&`|`int*`|`int*&`
+|`auto const &`
+|[small,gray]#= in_val =>#
+|`int* const&`|`int*`|`int*&`
+|`auto &&`
+|[small,gray]#= in_val =>#
+|`int*&`|`int*`|`int*&`
+|`auto const &&`
+|[small,gray]#= in_val =>#
+3+|cannot bind rvalue reference of type `int* const&&` to lvalue of type `int*`
+|===
+
+[cols="<3,^2,<3,<3,<3",options="header"]
+|===
+3+<|Type of `in_val` is `int const *`
+<|`decltype(in_val)` result
+<|`decltype\((in_val))` result
+
+|`auto`
+|[small,gray]#= in_val =>#
+|`int const*`|`int const*`|`int const*&`
+|`auto const`
+|[small,gray]#= in_val =>#
+|`int const* const`|`int const*`|`int const*&`
+|`auto *`
+|[small,gray]#= in_val =>#
+|`int const*`|`int const*`|`int const*&`
+|`auto const *`
+|[small,gray]#= in_val =>#
+|`int const*`|`int const*`|`int const*&`
+|`auto const * const`
+|[small,gray]#= in_val =>#
+|`int const* const`|`int const*`|`int const*&`
+|`auto &`
+|[small,gray]#= in_val =>#
+|`int const*&`|`int const*`|`int const*&`
+|`auto const &`
+|[small,gray]#= in_val =>#
+|`int const* const&`|`int const*`|`int const*&`
+|`auto &&`
+|[small,gray]#= in_val =>#
+|`int const*&`|`int const*`|`int const*&`
+|`auto const &&`
+|[small,gray]#= in_val =>#
+3+|cannot bind rvalue reference of type `const int* const&&` to lvalue of type `const int*`
+|===
+
+[cols="<3,^2,<3,<3,<3",options="header"]
+|===
+3+<|Type of `in_val` is `int const * const`
+<|`decltype(in_val)` result
+<|`decltype\((in_val))` result
+
+|`auto`
+|[small,gray]#= in_val =>#
+|`int const*`|`int const* const`|`int const* const&`
+|`auto const`
+|[small,gray]#= in_val =>#
+|`int const* const`|`int const* const`|`int const* const&`
+|`auto *`
+|[small,gray]#= in_val =>#
+|`int const*`|`int const* const`|`int const* const&`
+|`auto const *`
+|[small,gray]#= in_val =>#
+|`int const*`|`int const* const`|`int const* const&`
+|`auto const * const`
+|[small,gray]#= in_val =>#
+|`int const* const`|`int const* const`|`int const* const&`
+|`auto &`
+|[small,gray]#= in_val =>#
+|`int const* const&`|`int const* const`|`int const* const&`
+|`auto const &`
+|[small,gray]#= in_val =>#
+|`int const* const&`|`int const* const`|`int const* const&`
+|`auto &&`
+|[small,gray]#= in_val =>#
+|`int const* const&`|`int const* const`|`int const* const&`
+|`auto const &&`
+|[small,gray]#= in_val =>#
+3+|cannot bind rvalue reference of type `const int* const&&` to lvalue of type `const int* const`
+|===
+
+[cols="<3,^2,<3,<3,<3",options="header"]
+|===
+3+<|Type of `in_val` is `int &`
+<|`decltype(in_val)` result
+<|`decltype\((in_val))` result
+
+|`auto`
+|[small,gray]#= in_val =>#
+|`int`|`int&`|`int&`
+|`auto const`
+|[small,gray]#= in_val =>#
+|`int const`|`int&`|`int&`
+|`auto *`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `auto*` from `in_val`
+|`auto const *`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `const auto*` from `in_val`
+|`auto const * const`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `const auto* const` from `in_val`
+|`auto &`
+|[small,gray]#= in_val =>#
+|`int&`|`int&`|`int&`
+|`auto const &`
+|[small,gray]#= in_val =>#
+|`int const&`|`int&`|`int&`
+|`auto &&`
+|[small,gray]#= in_val =>#
+|`int&`|`int&`|`int&`
+|`auto const &&`
+|[small,gray]#= in_val =>#
+3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `int`
+|===
+
+[cols="<3,^2,<3,<3,<3",options="header"]
+|===
+3+<|Type of `in_val` is `int const &`
+<|`decltype(in_val)` result
+<|`decltype\((in_val))` result
+
+|`auto`
+|[small,gray]#= in_val =>#
+|`int`|`int const&`|`int const&`
+|`auto const`
+|[small,gray]#= in_val =>#
+|`int const`|`int const&`|`int const&`
+|`auto *`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `auto*` from `in_val`
+|`auto const *`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `const auto*` from `in_val`
+|`auto const * const`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `const auto* const` from `in_val`
+|`auto &`
+|[small,gray]#= in_val =>#
+|`int const&`|`int const&`|`int const&`
+|`auto const &`
+|[small,gray]#= in_val =>#
+|`int const&`|`int const&`|`int const&`
+|`auto &&`
+|[small,gray]#= in_val =>#
+|`int const&`|`int const&`|`int const&`
+|`auto const &&`
+|[small,gray]#= in_val =>#
+3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `const int`
+|===
+
+[cols="<3,^2,<3,<3,<3",options="header"]
+|===
+3+<|Type of `in_val` is `int &&`
+<|`decltype(in_val)` result
+<|`decltype\((in_val))` result
+
+|`auto`
+|[small,gray]#= in_val =>#
+|`int`|`int&`|`int&`
+|`auto const`
+|[small,gray]#= in_val =>#
+|`int const`|`int&`|`int&`
+|`auto *`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `auto*` from `in_val`
+|`auto const *`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `const auto*` from `in_val`
+|`auto const * const`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `const auto* const` from `in_val`
+|`auto &`
+|[small,gray]#= in_val =>#
+|`int&`|`int&`|`int&`
+|`auto const &`
+|[small,gray]#= in_val =>#
+|`int const&`|`int&`|`int&`
+|`auto &&`
+|[small,gray]#= in_val =>#
+|`int&`|`int&`|`int&`
+|`auto const &&`
+|[small,gray]#= in_val =>#
+3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `int`
+|===
+
+[cols="<3,^2,<3,<3,<3",options="header"]
+|===
+3+<|Type of `in_val` is `int const &&`
+<|`decltype(in_val)` result
+<|`decltype\((in_val))` result
+
+|`auto`
+|[small,gray]#= in_val =>#
+|`int`|`int const&`|`int const&`
+|`auto const`
+|[small,gray]#= in_val =>#
+|`int const`|`int const&`|`int const&`
+|`auto *`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `auto*` from `in_val`
+|`auto const *`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `const auto*` from `in_val`
+|`auto const * const`
+|[small,gray]#= in_val =>#
+3+|unable to deduce `const auto* const` from `in_val`
+|`auto &`
+|[small,gray]#= in_val =>#
+|`int const&`|`int const&`|`int const&`
+|`auto const &`
+|[small,gray]#= in_val =>#
+|`int const&`|`int const&`|`int const&`
+|`auto &&`
+|[small,gray]#= in_val =>#
+|`int const&`|`int const&`|`int const&`
+|`auto const &&`
+|[small,gray]#= in_val =>#
+3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `const int`
+|===

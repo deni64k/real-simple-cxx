@@ -1,0 +1,9 @@
+= C++ cheatsheets
+
+link:auto.html[What `auto` and `decltype(auto)` yield into]
+
+link:template_params.html[Type deduction in templates]
+
+link:template_params_move.html[Type deduction in templates with `std::move`]
+
+link:template_params_forward.html[Type deduction in templates with `std::forward`]

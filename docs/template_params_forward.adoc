@@ -3,13 +3,9 @@
 
 = Type deduction in template arguments
 
-Rule of thumb:
-
-
 ----
 include::{sourcedir}/template_params.cxx[]
 ----
-
 
 
 .T

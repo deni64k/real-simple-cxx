@@ -122,3 +122,4 @@ Temporary Items
 
 # End of https://www.gitignore.io/api/osx,bazel,c,c++,linux
 __pycache__
+*.pyc

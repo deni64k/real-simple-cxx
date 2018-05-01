@@ -21,20 +21,16 @@ include::{sourcedir}/auto.cxx[]
 ----
 
 
-
 [cols="<3,^2,<3,<3,<3",options="header"]
 |===
 3+<|Type of `in_val` is `int`
 <|`decltype(in_val)` result
 <|`decltype\((in_val))` result
-
 |`auto`
 |[small,gray]#= in_val =>#
-|`int`|`int`|`int&`
-|`auto const`
+|`int`|`int`|`int&`|`auto const`
 |[small,gray]#= in_val =>#
-|`int const`|`int`|`int&`
-|`auto *`
+|`int const`|`int`|`int&`|`auto *`
 |[small,gray]#= in_val =>#
 3+|unable to deduce `auto*` from `in_val`
 |`auto const *`
@@ -45,14 +41,11 @@ include::{sourcedir}/auto.cxx[]
 3+|unable to deduce `const auto* const` from `in_val`
 |`auto &`
 |[small,gray]#= in_val =>#
-|`int&`|`int`|`int&`
-|`auto const &`
+|`int&`|`int`|`int&`|`auto const &`
 |[small,gray]#= in_val =>#
-|`int const&`|`int`|`int&`
-|`auto &&`
+|`int const&`|`int`|`int&`|`auto &&`
 |[small,gray]#= in_val =>#
-|`int&`|`int`|`int&`
-|`auto const &&`
+|`int&`|`int`|`int&`|`auto const &&`
 |[small,gray]#= in_val =>#
 3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `int`
 |===
@@ -62,14 +55,11 @@ include::{sourcedir}/auto.cxx[]
 3+<|Type of `in_val` is `int const`
 <|`decltype(in_val)` result
 <|`decltype\((in_val))` result
-
 |`auto`
 |[small,gray]#= in_val =>#
-|`int`|`int const`|`int const&`
-|`auto const`
+|`int`|`int const`|`int const&`|`auto const`
 |[small,gray]#= in_val =>#
-|`int const`|`int const`|`int const&`
-|`auto *`
+|`int const`|`int const`|`int const&`|`auto *`
 |[small,gray]#= in_val =>#
 3+|unable to deduce `auto*` from `in_val`
 |`auto const *`
@@ -80,14 +70,11 @@ include::{sourcedir}/auto.cxx[]
 3+|unable to deduce `const auto* const` from `in_val`
 |`auto &`
 |[small,gray]#= in_val =>#
-|`int const&`|`int const`|`int const&`
-|`auto const &`
+|`int const&`|`int const`|`int const&`|`auto const &`
 |[small,gray]#= in_val =>#
-|`int const&`|`int const`|`int const&`
-|`auto &&`
+|`int const&`|`int const`|`int const&`|`auto &&`
 |[small,gray]#= in_val =>#
-|`int const&`|`int const`|`int const&`
-|`auto const &&`
+|`int const&`|`int const`|`int const&`|`auto const &&`
 |[small,gray]#= in_val =>#
 3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `const int`
 |===
@@ -97,32 +84,23 @@ include::{sourcedir}/auto.cxx[]
 3+<|Type of `in_val` is `int *`
 <|`decltype(in_val)` result
 <|`decltype\((in_val))` result
-
 |`auto`
 |[small,gray]#= in_val =>#
-|`int*`|`int*`|`int*&`
-|`auto const`
+|`int*`|`int*`|`int*&`|`auto const`
 |[small,gray]#= in_val =>#
-|`int* const`|`int*`|`int*&`
-|`auto *`
+|`int* const`|`int*`|`int*&`|`auto *`
 |[small,gray]#= in_val =>#
-|`int*`|`int*`|`int*&`
-|`auto const *`
+|`int*`|`int*`|`int*&`|`auto const *`
 |[small,gray]#= in_val =>#
-|`int const*`|`int*`|`int*&`
-|`auto const * const`
+|`int const*`|`int*`|`int*&`|`auto const * const`
 |[small,gray]#= in_val =>#
-|`int const* const`|`int*`|`int*&`
-|`auto &`
+|`int const* const`|`int*`|`int*&`|`auto &`
 |[small,gray]#= in_val =>#
-|`int*&`|`int*`|`int*&`
-|`auto const &`
+|`int*&`|`int*`|`int*&`|`auto const &`
 |[small,gray]#= in_val =>#
-|`int* const&`|`int*`|`int*&`
-|`auto &&`
+|`int* const&`|`int*`|`int*&`|`auto &&`
 |[small,gray]#= in_val =>#
-|`int*&`|`int*`|`int*&`
-|`auto const &&`
+|`int*&`|`int*`|`int*&`|`auto const &&`
 |[small,gray]#= in_val =>#
 3+|cannot bind rvalue reference of type `int* const&&` to lvalue of type `int*`
 |===
@@ -132,32 +110,23 @@ include::{sourcedir}/auto.cxx[]
 3+<|Type of `in_val` is `int const *`
 <|`decltype(in_val)` result
 <|`decltype\((in_val))` result
-
 |`auto`
 |[small,gray]#= in_val =>#
-|`int const*`|`int const*`|`int const*&`
-|`auto const`
+|`int const*`|`int const*`|`int const*&`|`auto const`
 |[small,gray]#= in_val =>#
-|`int const* const`|`int const*`|`int const*&`
-|`auto *`
+|`int const* const`|`int const*`|`int const*&`|`auto *`
 |[small,gray]#= in_val =>#
-|`int const*`|`int const*`|`int const*&`
-|`auto const *`
+|`int const*`|`int const*`|`int const*&`|`auto const *`
 |[small,gray]#= in_val =>#
-|`int const*`|`int const*`|`int const*&`
-|`auto const * const`
+|`int const*`|`int const*`|`int const*&`|`auto const * const`
 |[small,gray]#= in_val =>#
-|`int const* const`|`int const*`|`int const*&`
-|`auto &`
+|`int const* const`|`int const*`|`int const*&`|`auto &`
 |[small,gray]#= in_val =>#
-|`int const*&`|`int const*`|`int const*&`
-|`auto const &`
+|`int const*&`|`int const*`|`int const*&`|`auto const &`
 |[small,gray]#= in_val =>#
-|`int const* const&`|`int const*`|`int const*&`
-|`auto &&`
+|`int const* const&`|`int const*`|`int const*&`|`auto &&`
 |[small,gray]#= in_val =>#
-|`int const*&`|`int const*`|`int const*&`
-|`auto const &&`
+|`int const*&`|`int const*`|`int const*&`|`auto const &&`
 |[small,gray]#= in_val =>#
 3+|cannot bind rvalue reference of type `const int* const&&` to lvalue of type `const int*`
 |===
@@ -167,32 +136,23 @@ include::{sourcedir}/auto.cxx[]
 3+<|Type of `in_val` is `int const * const`
 <|`decltype(in_val)` result
 <|`decltype\((in_val))` result
-
 |`auto`
 |[small,gray]#= in_val =>#
-|`int const*`|`int const* const`|`int const* const&`
-|`auto const`
+|`int const*`|`int const* const`|`int const* const&`|`auto const`
 |[small,gray]#= in_val =>#
-|`int const* const`|`int const* const`|`int const* const&`
-|`auto *`
+|`int const* const`|`int const* const`|`int const* const&`|`auto *`
 |[small,gray]#= in_val =>#
-|`int const*`|`int const* const`|`int const* const&`
-|`auto const *`
+|`int const*`|`int const* const`|`int const* const&`|`auto const *`
 |[small,gray]#= in_val =>#
-|`int const*`|`int const* const`|`int const* const&`
-|`auto const * const`
+|`int const*`|`int const* const`|`int const* const&`|`auto const * const`
 |[small,gray]#= in_val =>#
-|`int const* const`|`int const* const`|`int const* const&`
-|`auto &`
+|`int const* const`|`int const* const`|`int const* const&`|`auto &`
 |[small,gray]#= in_val =>#
-|`int const* const&`|`int const* const`|`int const* const&`
-|`auto const &`
+|`int const* const&`|`int const* const`|`int const* const&`|`auto const &`
 |[small,gray]#= in_val =>#
-|`int const* const&`|`int const* const`|`int const* const&`
-|`auto &&`
+|`int const* const&`|`int const* const`|`int const* const&`|`auto &&`
 |[small,gray]#= in_val =>#
-|`int const* const&`|`int const* const`|`int const* const&`
-|`auto const &&`
+|`int const* const&`|`int const* const`|`int const* const&`|`auto const &&`
 |[small,gray]#= in_val =>#
 3+|cannot bind rvalue reference of type `const int* const&&` to lvalue of type `const int* const`
 |===
@@ -202,14 +162,11 @@ include::{sourcedir}/auto.cxx[]
 3+<|Type of `in_val` is `int &`
 <|`decltype(in_val)` result
 <|`decltype\((in_val))` result
-
 |`auto`
 |[small,gray]#= in_val =>#
-|`int`|`int&`|`int&`
-|`auto const`
+|`int`|`int&`|`int&`|`auto const`
 |[small,gray]#= in_val =>#
-|`int const`|`int&`|`int&`
-|`auto *`
+|`int const`|`int&`|`int&`|`auto *`
 |[small,gray]#= in_val =>#
 3+|unable to deduce `auto*` from `in_val`
 |`auto const *`
@@ -220,14 +177,11 @@ include::{sourcedir}/auto.cxx[]
 3+|unable to deduce `const auto* const` from `in_val`
 |`auto &`
 |[small,gray]#= in_val =>#
-|`int&`|`int&`|`int&`
-|`auto const &`
+|`int&`|`int&`|`int&`|`auto const &`
 |[small,gray]#= in_val =>#
-|`int const&`|`int&`|`int&`
-|`auto &&`
+|`int const&`|`int&`|`int&`|`auto &&`
 |[small,gray]#= in_val =>#
-|`int&`|`int&`|`int&`
-|`auto const &&`
+|`int&`|`int&`|`int&`|`auto const &&`
 |[small,gray]#= in_val =>#
 3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `int`
 |===
@@ -237,14 +191,11 @@ include::{sourcedir}/auto.cxx[]
 3+<|Type of `in_val` is `int const &`
 <|`decltype(in_val)` result
 <|`decltype\((in_val))` result
-
 |`auto`
 |[small,gray]#= in_val =>#
-|`int`|`int const&`|`int const&`
-|`auto const`
+|`int`|`int const&`|`int const&`|`auto const`
 |[small,gray]#= in_val =>#
-|`int const`|`int const&`|`int const&`
-|`auto *`
+|`int const`|`int const&`|`int const&`|`auto *`
 |[small,gray]#= in_val =>#
 3+|unable to deduce `auto*` from `in_val`
 |`auto const *`
@@ -255,14 +206,11 @@ include::{sourcedir}/auto.cxx[]
 3+|unable to deduce `const auto* const` from `in_val`
 |`auto &`
 |[small,gray]#= in_val =>#
-|`int const&`|`int const&`|`int const&`
-|`auto const &`
+|`int const&`|`int const&`|`int const&`|`auto const &`
 |[small,gray]#= in_val =>#
-|`int const&`|`int const&`|`int const&`
-|`auto &&`
+|`int const&`|`int const&`|`int const&`|`auto &&`
 |[small,gray]#= in_val =>#
-|`int const&`|`int const&`|`int const&`
-|`auto const &&`
+|`int const&`|`int const&`|`int const&`|`auto const &&`
 |[small,gray]#= in_val =>#
 3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `const int`
 |===
@@ -272,14 +220,11 @@ include::{sourcedir}/auto.cxx[]
 3+<|Type of `in_val` is `int &&`
 <|`decltype(in_val)` result
 <|`decltype\((in_val))` result
-
 |`auto`
 |[small,gray]#= in_val =>#
-|`int`|`int&`|`int&`
-|`auto const`
+|`int`|`int&`|`int&`|`auto const`
 |[small,gray]#= in_val =>#
-|`int const`|`int&`|`int&`
-|`auto *`
+|`int const`|`int&`|`int&`|`auto *`
 |[small,gray]#= in_val =>#
 3+|unable to deduce `auto*` from `in_val`
 |`auto const *`
@@ -290,14 +235,11 @@ include::{sourcedir}/auto.cxx[]
 3+|unable to deduce `const auto* const` from `in_val`
 |`auto &`
 |[small,gray]#= in_val =>#
-|`int&`|`int&`|`int&`
-|`auto const &`
+|`int&`|`int&`|`int&`|`auto const &`
 |[small,gray]#= in_val =>#
-|`int const&`|`int&`|`int&`
-|`auto &&`
+|`int const&`|`int&`|`int&`|`auto &&`
 |[small,gray]#= in_val =>#
-|`int&`|`int&`|`int&`
-|`auto const &&`
+|`int&`|`int&`|`int&`|`auto const &&`
 |[small,gray]#= in_val =>#
 3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `int`
 |===
@@ -307,14 +249,11 @@ include::{sourcedir}/auto.cxx[]
 3+<|Type of `in_val` is `int const &&`
 <|`decltype(in_val)` result
 <|`decltype\((in_val))` result
-
 |`auto`
 |[small,gray]#= in_val =>#
-|`int`|`int const&`|`int const&`
-|`auto const`
+|`int`|`int const&`|`int const&`|`auto const`
 |[small,gray]#= in_val =>#
-|`int const`|`int const&`|`int const&`
-|`auto *`
+|`int const`|`int const&`|`int const&`|`auto *`
 |[small,gray]#= in_val =>#
 3+|unable to deduce `auto*` from `in_val`
 |`auto const *`
@@ -325,14 +264,11 @@ include::{sourcedir}/auto.cxx[]
 3+|unable to deduce `const auto* const` from `in_val`
 |`auto &`
 |[small,gray]#= in_val =>#
-|`int const&`|`int const&`|`int const&`
-|`auto const &`
+|`int const&`|`int const&`|`int const&`|`auto const &`
 |[small,gray]#= in_val =>#
-|`int const&`|`int const&`|`int const&`
-|`auto &&`
+|`int const&`|`int const&`|`int const&`|`auto &&`
 |[small,gray]#= in_val =>#
-|`int const&`|`int const&`|`int const&`
-|`auto const &&`
+|`int const&`|`int const&`|`int const&`|`auto const &&`
 |[small,gray]#= in_val =>#
 3+|cannot bind rvalue reference of type `const int&&` to lvalue of type `const int`
 |===

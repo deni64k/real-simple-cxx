@@ -1,4 +1,5 @@
 from pathlib import Path
+import concurrent.futures
 import os
 import os.path
 import subprocess
@@ -62,3 +63,26 @@ def mcols(s):
 
 def bquote(s):
     return s.replace('\'', '`')
+
+class Call():
+    def __init__(self, fn, *args, **kwargs):
+        self.fn     = fn
+        self.args   = args
+        self.kwargs = kwargs
+
+    def __call__(self):
+        return self.fn(*self.args, **self.kwargs)
+
+def async_format(generator):
+    def itself(x):
+        return x
+
+    fs = list()
+    with concurrent.futures.ThreadPoolExecutor(max_workers=os.cpu_count()*2) as executor:
+        for chunk in generator():
+            if callable(chunk):
+                fs.append(executor.submit(chunk))
+            else:
+                fs.append(executor.submit(itself, chunk))
+        for f in fs:
+            yield f.result()

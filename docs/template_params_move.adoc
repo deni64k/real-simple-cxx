@@ -1,12 +1,50 @@
 
 :sourcedir: /Users/denis/Code/mine/real-simple-cxx/src
+:source-highlighter: coderay
+
+:toc: left
 
 = Type deduction in template arguments
 
+== Rule of thumb:
+
+=== Without cv-qualifiers
+
+`T`::
+Signifies a copy of the parameter.
+
+`T *`::
+Signifies a copy of the pointer parameter. The parameter must point out to a non-constant object.
+
+`T &`::
+Signifies an lvalue reference of the parameter. The parameter must be a non-constant object.
+
+`T &&`::
+Signifies an rvalue reference of the parameter.
+
+=== With cv-qualifiers
+
+`T const `::
+Signifies a copy of the argument that you promise not to change.
+
+`T const *`::
+Signifies a copy of the pointer argument. The pointer can point out to a less cv-qualified object.
+
+`T * const`::
+`T const * const`::
+The same as `T const` but `T` has to be a pointer. You simply promise not to change the argument.
+
+== Experiment
+
+=== Source code
+
+[source,c++]
 ----
 include::{sourcedir}/template_params.cxx[]
 ----
 
+
+=== T
 
 .T
 [cols="2,2,2,3",options="header"]
@@ -35,6 +73,8 @@ include::{sourcedir}/template_params.cxx[]
 |`int`|`int`|`void Run(T) [with T = int]`
 |=========================================================
 
+=== T const
+
 .T const
 [cols="2,2,2,3",options="header"]
 |=========================================================
@@ -61,6 +101,8 @@ include::{sourcedir}/template_params.cxx[]
 |int const &&
 |`int`|`int const`|`void Run(T) [with T = int]`
 |=========================================================
+
+=== T *
 
 .T *
 [cols="2,2,2,3",options="header"]
@@ -89,6 +131,8 @@ include::{sourcedir}/template_params.cxx[]
 3+|no matching function for call to `Run(std::remove_reference<const int&>::type)`
 |=========================================================
 
+=== T const *
+
 .T const *
 [cols="2,2,2,3",options="header"]
 |=========================================================
@@ -115,6 +159,8 @@ include::{sourcedir}/template_params.cxx[]
 |int const &&
 3+|no matching function for call to `Run(std::remove_reference<const int&>::type)`
 |=========================================================
+
+=== T const * const
 
 .T const * const
 [cols="2,2,2,3",options="header"]
@@ -143,6 +189,8 @@ include::{sourcedir}/template_params.cxx[]
 3+|no matching function for call to `Run(std::remove_reference<const int&>::type)`
 |=========================================================
 
+=== T &
+
 .T &
 [cols="2,2,2,3",options="header"]
 |=========================================================
@@ -151,24 +199,26 @@ include::{sourcedir}/template_params.cxx[]
 |Template value type, dectype(t)
 |\\__func__
 |int
-3+|cannot bind non-const lvalue reference of type `int&` to an rvalue of type `std::remove_reference<int&>::type {aka int}`
+3+|cannot bind non-const lvalue reference of type `int&` to an rvalue of type `std::remove_reference<int&>::type` {aka `int`}
 |int const
 |`int const`|`int const&`|`void Run(T&) [with T = const int]`
 |int *
-3+|cannot bind non-const lvalue reference of type `int*&` to an rvalue of type `std::remove_reference<int*&>::type {aka int*}`
+3+|cannot bind non-const lvalue reference of type `int*&` to an rvalue of type `std::remove_reference<int*&>::type` {aka `int*`}
 |int const *
-3+|cannot bind non-const lvalue reference of type `const int*&` to an rvalue of type `std::remove_reference<const int*&>::type {aka const int*}`
+3+|cannot bind non-const lvalue reference of type `const int*&` to an rvalue of type `std::remove_reference<const int*&>::type` {aka `const int*`}
 |int const * const
 |`int const* const`|`int const* const&`|`void Run(T&) [with T = const int* const]`
 |int &
-3+|cannot bind non-const lvalue reference of type `int&` to an rvalue of type `std::remove_reference<int&>::type {aka int}`
+3+|cannot bind non-const lvalue reference of type `int&` to an rvalue of type `std::remove_reference<int&>::type` {aka `int`}
 |int const &
 |`int const`|`int const&`|`void Run(T&) [with T = const int]`
 |int &&
-3+|cannot bind non-const lvalue reference of type `int&` to an rvalue of type `std::remove_reference<int&>::type {aka int}`
+3+|cannot bind non-const lvalue reference of type `int&` to an rvalue of type `std::remove_reference<int&>::type` {aka `int`}
 |int const &&
 |`int const`|`int const&`|`void Run(T&) [with T = const int]`
 |=========================================================
+
+=== T const &
 
 .T const &
 [cols="2,2,2,3",options="header"]
@@ -197,6 +247,8 @@ include::{sourcedir}/template_params.cxx[]
 |`int`|`int const&`|`void Run(const T&) [with T = int]`
 |=========================================================
 
+=== T &&
+
 .T &&
 [cols="2,2,2,3",options="header"]
 |=========================================================
@@ -223,6 +275,8 @@ include::{sourcedir}/template_params.cxx[]
 |int const &&
 |`int const`|`int const&&`|`void Run(T&&) [with T = const int]`
 |=========================================================
+
+=== T const &&
 
 .T const &&
 [cols="2,2,2,3",options="header"]

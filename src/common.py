@@ -10,7 +10,8 @@ SRC_ROOT  = os.path.abspath(os.path.join(os.getcwd(), 'src'))
 DOCS_ROOT = os.path.abspath(os.path.join(os.getcwd(), 'docs'))
 
 IN_LITERAL = '''IN_TYPE in_val = 0;'''
-IN_REF     = '''int val; IN_TYPE in_val = val;'''
+IN_REF     = '''int val;
+IN_TYPE in_val = val;'''
 
 IN_TYPES = [
     (IN_LITERAL, 'int'),

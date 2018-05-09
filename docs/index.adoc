@@ -1,9 +1,13 @@
 = C++ cheatsheets
 
-link:auto.html[What `auto` and `decltype(auto)` yield into]
+. Type deduction in `auto`
+.. link:auto.html[`auto` of `value`]
+.. link:auto.html[`decltype(auto)` of `value`]
+.. link:auto.html[`decltype(auto)` of `(value)`]
+.. link:auto.html[`decltype\((value))`]
 
-link:template_params.html[Type deduction in templates]
+. Type deduction in templates
+.. link:template_params.html[Called with no wrapper]
+.. link:template_params_move.html[Called with `std::move`]
+.. link:template_params_forward.html[Called with `std::forward`]
 
-link:template_params_move.html[Type deduction in templates with `std::move`]
-
-link:template_params_forward.html[Type deduction in templates with `std::forward`]
